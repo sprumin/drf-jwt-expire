@@ -1,11 +1,11 @@
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework_jwt.serializers import JSONWebTokenSerializer
-from rest_framework_jwt.views import JSONWebTokenAPIView
+from rest_framework_jwt.views import JSONWebTokenAPIView, ObtainJSONWebToken
 
 from app.models import BlackList
 
@@ -23,13 +23,17 @@ def index(request):
 
     if not BlackList.objects.filter(user__username=payload['username']):
         result = {"token": token}
-        status = 200
+        _status = 200
     else:
         result = {"detail": "Invalid Token"}
-        status = 401
+        _status = 401
 
-    return JsonResponse(result, status=status)
+    return JsonResponse(result, status=_status)
 
 
-class ObtainJsonWebToken(JSONWebTokenAPIView):
-    serializer_class = JSONWebTokenSerializer
+@api_view(['POST'])
+@permission_classes((AllowAny, ))
+def test(request):
+    o = ObtainJSONWebToken(JSONWebTokenAPIView)
+
+    print(request.body)
