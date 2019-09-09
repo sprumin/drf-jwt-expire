@@ -5,3 +5,4 @@
 - 서버에서 임의로 token expire 시키기
 - 무조건 이번주안에 끝내기 ( 2019-09-08 까지 )
 - django-rest-framework-jwt 모듈과 소스를 참고하여 개발하였습니다.
+- Blacklist 기능 완료. post 요청 시 blacklist 에서 삭제하는 기능 추가해야함
